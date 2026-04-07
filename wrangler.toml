@@ -3,9 +3,9 @@ main = "src/index.js"
 compatibility_date = "2024-01-01"
 
 [[d1_databases]]
-binding = "DB"
-database_name = "hosinoneko-subscribers"
-database_id = "your-database-id-here"
+binding = "NCT-SUBSCRIBER"
+database_name = "nct-subscribe"
+database_id = "99d733ef-81b5-4456-940b-c5d6c0d5d9f4"
 
 [vars]
 ENVIRONMENT = "production"
