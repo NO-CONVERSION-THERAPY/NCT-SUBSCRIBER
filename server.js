@@ -59,7 +59,7 @@ app.get('/subscribe', async (req, res) => {
     }
 
     // 驗證 Ps Code (token)
-    if (tempTokens[token] === mail) {
+    if (tempTokens[token] && tempTokens[token].email === mail) {
         const subs = JSON.parse(await fs.readFile('./sub.json', 'utf8'));
         const user = subs.find(u => u.email === mail);
         
@@ -221,6 +221,6 @@ app.post('/api/webhook', async (req, res) => {//github webhook api處理
 });
 
 const port = 3000//process.env.PORT
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
     console.log(`SERVER 運行在 port ${port}`);
 });

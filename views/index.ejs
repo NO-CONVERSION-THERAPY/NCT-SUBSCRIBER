@@ -1,21 +1,15 @@
 <!DOCTYPE html>
 <html lang="zh_tw">
     <%- include('partials/head') %>
-    <head>
-        <link rel="stylesheet" href="css/index.css"/><!--主页特有（喜-->
-    </head>
     <body>
-        
         <div class="title-Placeholder"></div><!--占位-->
         <div class="main-title">
             <div class="title"><!--Title-->
-                <img class="indexIcon" width="100px" style="border-radius: 50%; margin: 0 25px;" 
-                    src="https://avatars.githubusercontent.com/u/177436503?v=4"/>
-                <div id="IndexTitle" style="opacity: 0;">訂閱我的文章！</div><!--這裏本質上是看不見的，實際上爲了動畫，這些文字在下一行的id="output"顯示-->
-                <div id="outPut"></div><!--標題顯示-->
+                <h1>訂閱我的文章！</h1>
+                <div class="indexButton"><!--indexButton是主页按钮-->
+                    <a href="/subscribe" class="button1">Subscribe</a>
+                </div>
             </div>
-            <div class="main_2">有一些有意思的在上面更新，網站本身也是一個開源項目</div><!--副标题,修改请前往template.html-->
-            <%- include('partials/index-link') %>
         </div>
     </body>
 </html>
