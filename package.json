@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "wrangler pages dev",
+    "dev": "wrangler pages dev public",
     "deploy": "echo 'Deploy via Git push to Cloudflare Pages'",
-    "db:init": "wrangler d1 execute hosinoneko-subscribers --file=./schema.sql",
-    "db:migrate": "wrangler d1 migrations apply hosinoneko-subscribers"
+    "db:init": "wrangler d1 execute nct-subscribe --file=./schema.sql",
+    "db:migrate": "wrangler d1 migrations apply nct-subscribe"
   },
   "dependencies": {},
   "devDependencies": {

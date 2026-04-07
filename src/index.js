@@ -69,14 +69,14 @@ async function handleSubscribeGet(request, env, url) {
         });
     }
 
-    const tokenData = await env.DB.prepare(
+    const tokenData = await env.NCT_SUBSCRIBER.prepare(
         'SELECT email FROM temp_tokens WHERE token = ? AND expires > ?'
     ).bind(token, Date.now()).first();
 
     if (tokenData && tokenData.email === mail) {
-        await env.DB.prepare('DELETE FROM temp_tokens WHERE token = ?').bind(token).run();
+        await env.NCT_SUBSCRIBER.prepare('DELETE FROM temp_tokens WHERE token = ?').bind(token).run();
 
-        const user = await env.DB.prepare(
+        const user = await env.NCT_SUBSCRIBER.prepare(
             'SELECT * FROM subscribers WHERE email = ?'
         ).bind(mail).first();
 
@@ -106,7 +106,7 @@ async function handleSendPsCode(request, env) {
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     const expires = Date.now() + 600000;
 
-    await env.DB.prepare(
+    await env.NCT_SUBSCRIBER.prepare(
         'INSERT OR REPLACE INTO temp_tokens (token, email, expires) VALUES (?, ?, ?)'
     ).bind(code, email, expires).run();
 
@@ -134,16 +134,16 @@ async function handleSubscribePost(request, env) {
     const language = formData.get('language');
     const modSub = formData.get('mod-sub');
 
-    const existing = await env.DB.prepare(
+    const existing = await env.NCT_SUBSCRIBER.prepare(
         'SELECT id FROM subscribers WHERE email = ?'
     ).bind(email).first();
 
     if (existing) {
-        await env.DB.prepare(
+        await env.NCT_SUBSCRIBER.prepare(
             'UPDATE subscribers SET firstname = ?, lastname = ?, language = ?, mod_sub = ?, updated_at = CURRENT_TIMESTAMP WHERE email = ?'
         ).bind(firstname, lastname, language, modSub, email).run();
     } else {
-        await env.DB.prepare(
+        await env.NCT_SUBSCRIBER.prepare(
             'INSERT INTO subscribers (email, firstname, lastname, language, mod_sub) VALUES (?, ?, ?, ?, ?)'
         ).bind(email, firstname, lastname, language, modSub).run();
     }
@@ -155,14 +155,14 @@ async function handleSubscribeVerify(request, env, url) {
     const mail = url.searchParams.get('mail');
     const token = url.searchParams.get('token');
 
-    const tokenData = await env.DB.prepare(
+    const tokenData = await env.NCT_SUBSCRIBER.prepare(
         'SELECT email FROM temp_tokens WHERE token = ? AND expires > ?'
     ).bind(token, Date.now()).first();
 
     if (tokenData && tokenData.email === mail) {
-        await env.DB.prepare('DELETE FROM temp_tokens WHERE token = ?').bind(token).run();
+        await env.NCT_SUBSCRIBER.prepare('DELETE FROM temp_tokens WHERE token = ?').bind(token).run();
 
-        const user = await env.DB.prepare(
+        const user = await env.NCT_SUBSCRIBER.prepare(
             'SELECT * FROM subscribers WHERE email = ?'
         ).bind(mail).first();
 
@@ -202,7 +202,7 @@ async function handleWebhook(request, env) {
         console.log('新增:', added);
         console.log('修改:', modified);
 
-        const subscribers = await env.DB.prepare('SELECT * FROM subscribers').all();
+        const subscribers = await env.NCT_SUBSCRIBER.prepare('SELECT * FROM subscribers').all();
 
         for (const user of subscribers.results) {
             if (user.mod_sub === 'true' && modified.length > 0) {
@@ -258,7 +258,7 @@ async function sendEmail(env, to, subject, html) {
 }
 
 async function cleanupExpiredTokens(env) {
-    await env.DB.prepare('DELETE FROM temp_tokens WHERE expires < ?').bind(Date.now()).run();
+    await env.NCT_SUBSCRIBER.prepare('DELETE FROM temp_tokens WHERE expires < ?').bind(Date.now()).run();
 }
 
 function renderIndexPage() {
